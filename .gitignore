@@ -6,3 +6,4 @@ venv/
 .venv/
 sprint_*_backlog.md
 tests/sample_output_*.md
+sprint_1_mcp_payload.json

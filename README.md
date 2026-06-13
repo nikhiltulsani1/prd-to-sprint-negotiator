@@ -261,3 +261,19 @@ returns 201" instead of "test the login". That specificity comes from
 > Runs in ~40 seconds end-to-end. Generates sprint backlog,
 > QA checklist with 40–50 specific test cases, and MCP payload
 > for direct Jira/ADO/Linear import.
+
+## Reliability & Safety
+
+- **Graceful degradation** — agent calls go to Azure AI Foundry first, then fall back to GitHub Models, then to defaults if both are unavailable. A single service outage doesn't break the pipeline.
+- **No black-box decisions** — every feature the Negotiator includes or excludes comes with explicit written reasoning in the negotiation notes. A PM can see exactly why something was deferred.
+- **Capacity is hard-enforced** — a programmatic safety net guarantees committed points never exceed effective sprint capacity, even if the model returns an inconsistent estimate. Story points are clamped to valid fibonacci values and totals are recalculated rather than trusted.
+- **Independent failure isolation** — QA reviews run in parallel; if one feature's review fails, the others still complete rather than crashing the whole run.
+- **Full pipeline test** covers all five agents end-to-end, asserting capacity limits hold and required output sections are present.
+
+## Built By
+
+**Nikhil Tulsani**
+- Microsoft Learn Username: NikhilTulsani-1371
+- GitHub: [@nikhiltulsani1](https://github.com/nikhiltulsani1)
+- Hackathon: Microsoft Agents League 2026
+- Hackathon Registered Mail : Nikhil.tulsani1@gmail.com

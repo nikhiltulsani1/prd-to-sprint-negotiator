@@ -66,6 +66,26 @@ Output Agent → sprint_N_backlog.md
 Each agent only sees what it needs. The Negotiator gets all three
 inputs and makes the final call on what fits in the sprint.
 
+## Architecture Diagram
+
+```mermaid
+graph TD
+    A[PRD file] --> B[Product Agent]
+    B --> C[Microsoft Foundry - gpt-4.1-mini]
+    B --> D[Engineer Agent]
+    D --> C
+    D --> E[QA Agent - parallel reviews]
+    E --> C
+    E --> F[Negotiator Agent]
+    B --> F
+    D --> F
+    F --> C
+    F --> G[Output Agent]
+    G --> C
+    G --> H[sprint_N_backlog.md]
+    G --> I[MCP Payload - Jira/ADO/Linear]
+```
+
 ## Sprint Context
 
 The --sprint, --completed, --blocked, and --velocity flags make

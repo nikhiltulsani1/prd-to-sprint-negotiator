@@ -30,10 +30,15 @@ Five specialised agents run in sequence, each adding a layer of analysis:
 # Sprint 1
 python main.py samples/sample_prd.txt --sprint 1
 
-# Sprint 2 — with context from last sprint
+# Sprint 2 — with context from last sprint (story points)
 python main.py samples/sample_prd.txt --sprint 2 \
   --completed "User Authentication" \
   --blocked "Task Board" \
+  --velocity 32
+
+# Sprint 2 — backwards compatible ratio format also works
+python main.py samples/sample_prd.txt --sprint 2 \
+  --completed "User Authentication" \
   --velocity 0.8
 ```
 

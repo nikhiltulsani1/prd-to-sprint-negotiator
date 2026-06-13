@@ -37,7 +37,8 @@ def _run_agent(label: str, description: str, fn):
 @click.option('--sprint',     default=1,    help='Sprint number')
 @click.option('--completed',  default='',   help='Comma-separated completed feature names')
 @click.option('--blocked',    default='',   help='Comma-separated blocked feature names')
-@click.option('--velocity',   default=1.0,  help='Velocity factor from last sprint (e.g. 0.8)')
+@click.option('--velocity',   default=40.0, type=float,
+              help='Story points completed last sprint (e.g. 32). Also accepts ratio (0.8).')
 @click.option('--output',     default=None,           help='Output file path (default: sprint_N_backlog.md)')
 @click.option('--project-key', default='PROJ',        help='Jira/ADO project key (e.g. TASKFLOW, PROJ)')
 @click.option('--standards', default='standards.md',  help='Path to team standards file (optional)')
@@ -50,6 +51,15 @@ def negotiate(prd_file, sprint, completed, blocked, velocity, output, project_ke
     from agents.negotiator_agent import NegotiatorAgent
     from agents.output_agent import OutputAgent
 
+    def normalise_velocity(v: float, default_capacity: int = 40) -> float:
+        """Accepts story points (32) or ratio (0.8). Always returns a ratio 0.1–1.0."""
+        if v > 1:
+            return min(v / default_capacity, 1.0)
+        return max(0.1, min(v, 1.0))
+
+    velocity_display = f"{int(velocity)} pts" if velocity > 1 else f"{int(velocity * 100)}%"
+    velocity_ratio = normalise_velocity(velocity)
+
     team_standards = load_standards(standards)
     standards_content = team_standards.get("content", "")
     if team_standards.get("exists"):
@@ -57,7 +67,7 @@ def negotiate(prd_file, sprint, completed, blocked, velocity, output, project_ke
 
     console.print(Panel(
         f"[bold white]PRD-to-Sprint Negotiator[/bold white]\n"
-        f"[dim]Sprint {sprint}  |  {prd_file}  |  velocity {velocity}[/dim]",
+        f"[dim]Sprint {sprint}  |  {prd_file}  |  velocity {velocity_display}[/dim]",
         border_style="blue",
         padding=(0, 2),
     ))
@@ -67,12 +77,13 @@ def negotiate(prd_file, sprint, completed, blocked, velocity, output, project_ke
         prd_content = f.read()
 
     sprint_context = {
-        "sprint":       sprint,
-        "completed":    [s.strip() for s in completed.split(',') if s.strip()],
-        "blocked":      [s.strip() for s in blocked.split(',') if s.strip()],
-        "velocity":     velocity,
-        "project_name": "Project",
-        "standards":    standards_content,
+        "sprint":            sprint,
+        "completed":         [s.strip() for s in completed.split(',') if s.strip()],
+        "blocked":           [s.strip() for s in blocked.split(',') if s.strip()],
+        "velocity":          velocity_ratio,
+        "velocity_display":  velocity_display,
+        "project_name":      "Project",
+        "standards":         standards_content,
     }
 
     pipeline_start = time.time()

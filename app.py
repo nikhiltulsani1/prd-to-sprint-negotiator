@@ -1,6 +1,13 @@
 import streamlit as st
 import time
 import json
+
+
+def normalise_velocity(v: float, default_capacity: int = 40) -> float:
+    """Accepts story points (32) or ratio (0.8). Always returns a ratio 0.1–1.0."""
+    if v > 1:
+        return min(v / default_capacity, 1.0)
+    return max(0.1, min(v, 1.0))
 try:
     import markdown as md
 except Exception:
@@ -95,7 +102,21 @@ with left:
     c1, c2 = st.columns(2)
     with c1:
         sprint_num = st.number_input("Sprint", min_value=1, value=1, step=1)
-        velocity = st.slider("Velocity", 0.1, 1.0, 1.0, 0.1)
+        velocity_mode = st.radio(
+            "Velocity input", ["📊 Story points", "📉 Ratio"],
+            horizontal=True, label_visibility="collapsed"
+        )
+        if velocity_mode == "📊 Story points":
+            velocity = float(st.number_input(
+                "Story points completed last sprint",
+                min_value=1, max_value=100, value=40,
+                help="How many story points did your team ship last sprint? Default 40 = full capacity."
+            ))
+        else:
+            velocity = st.slider(
+                "Velocity ratio", min_value=0.1, max_value=1.0, value=1.0, step=0.1,
+                help="0.8 = team completed 80% of committed points last sprint"
+            )
     with c2:
         completed = st.text_input("Items Completed", placeholder="Auth, Login")
         blocked = st.text_input("Items Blocked", placeholder="Payments")
@@ -179,11 +200,15 @@ if run:
     from agents.output_agent import OutputAgent
     from agents.mcp_payload_generator import MCPPayloadGenerator
 
+    velocity_ratio = normalise_velocity(velocity)
+    velocity_display = f"{int(velocity)} pts" if velocity > 1 else f"{int(velocity * 100)}%"
+
     sprint_context = {
-        "sprint": sprint_num,
-        "completed": [s.strip() for s in completed.split(',') if s.strip()],
-        "blocked":   [s.strip() for s in blocked.split(',') if s.strip()],
-        "velocity":  velocity,
+        "sprint":           sprint_num,
+        "completed":        [s.strip() for s in completed.split(',') if s.strip()],
+        "blocked":          [s.strip() for s in blocked.split(',') if s.strip()],
+        "velocity":         velocity_ratio,
+        "velocity_display": velocity_display,
         "standards": standards_content,
     }
 

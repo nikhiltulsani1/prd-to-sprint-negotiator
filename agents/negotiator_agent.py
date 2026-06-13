@@ -75,9 +75,11 @@ class NegotiatorAgent:
             )
             feature_lines.append(line)
 
+        velocity_display = sprint_context.get("velocity_display", f"{int(velocity * 100)}%")
         user_prompt = (
             f"Sprint {sprint} negotiation.\n"
-            f"Effective capacity: {effective_capacity} pts (40 × {velocity} velocity).\n"
+            f"Sprint capacity: 40 story points. Team completed {velocity_display} last sprint.\n"
+            f"Effective capacity this sprint: {effective_capacity} points. Never commit more than {effective_capacity} points.\n"
         )
 
         if completed:

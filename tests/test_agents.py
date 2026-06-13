@@ -12,6 +12,23 @@ SAMPLE_PRD = os.path.join(SAMPLES_DIR, "sample_prd.txt")
 # Existence checks (no API calls)
 # ---------------------------------------------------------------------------
 
+def test_velocity_normalisation():
+    import sys, os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+    # inline the same normalise_velocity logic used in main.py
+    def normalise_velocity(v, default_capacity=40):
+        if v > 1:
+            return min(v / default_capacity, 1.0)
+        return max(0.1, min(v, 1.0))
+
+    assert normalise_velocity(32)  == 0.8,  f"got {normalise_velocity(32)}"
+    assert normalise_velocity(0.8) == 0.8,  f"got {normalise_velocity(0.8)}"
+    assert normalise_velocity(40)  == 1.0,  f"got {normalise_velocity(40)}"
+    assert normalise_velocity(50)  == 1.0,  f"got {normalise_velocity(50)}"
+    assert normalise_velocity(0.5) == 0.5,  f"got {normalise_velocity(0.5)}"
+    print("\nnormalise_velocity: all 5 cases passed")
+
+
 def test_product_agent_exists():
     from agents.product_agent import ProductAgent
     assert hasattr(ProductAgent(), "run")

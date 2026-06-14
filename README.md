@@ -26,6 +26,12 @@ Five specialised agents run in sequence, each adding a layer of analysis:
 - **Negotiator Agent** — reconciles all three inputs against sprint capacity and velocity, includes or excludes with explicit reasoning
 - **Output Agent** — formats the negotiated plan as a markdown sprint backlog ready to paste into Jira or GitHub Projects
 
+To run agents create .env based on .env.example and install python dependencies 
+
+```bash
+pip install -r requirements.txt
+```
+
 ```bash
 # Sprint 1
 python main.py samples/sample_prd.txt --sprint 1
@@ -37,7 +43,8 @@ python main.py samples/sample_prd.txt --sprint 2 \
   --velocity 32
 
 # Sprint 2 — backwards compatible ratio format also works
-python main.py samples/sample_prd.txt --sprint 2 \
+python main.py s
+amples/sample_prd.txt --sprint 2 \
   --completed "User Authentication" \
   --velocity 0.8
 ```

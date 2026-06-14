@@ -1,0 +1,32 @@
+Product: TaskFlow — Team Task Management App
+
+Overview:
+TaskFlow is a web-based task management tool for small engineering teams.
+It replaces spreadsheets with a collaborative, real-time task board.
+
+Features:
+
+1. User Authentication
+   - Email/password signup and login
+   - JWT-based session management
+   - Password reset via email
+
+2. Task Board
+   - Create, edit, delete tasks
+   - Assign tasks to team members
+   - Set due dates and priorities
+   - Drag-and-drop between columns (To Do, In Progress, Done)
+
+3. Team Management
+   - Create teams and invite members via email
+   - Role-based access (Admin, Member, Viewer)
+
+4. Notifications
+   - Email notifications for task assignments
+   - In-app notifications for due date reminders
+
+5. Reporting
+   - Weekly summary of completed vs pending tasks
+   - Individual team member productivity report
+
+Tech Stack: React frontend, FastAPI backend, PostgreSQL, Redis for caching

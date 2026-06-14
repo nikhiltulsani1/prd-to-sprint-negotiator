@@ -1,0 +1,11 @@
+azure-ai-inference
+azure-core
+python-dotenv
+click
+rich
+requests
+pytest
+streamlit
+PyMuPDF
+python-docx
+markdown

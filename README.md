@@ -280,8 +280,8 @@ returns 201" instead of "test the login". That specificity comes from
 ▶️ [Watch the demo](https://youtu.be/XN_PZRsHqG8)
 
 
-> Runs in ~40 seconds end-to-end. Generates sprint backlog,
-> QA checklist with 40–50 specific test cases, and MCP payload
+> Runs in ~100 seconds end-to-end. Generates sprint backlog,
+> QA checklist with 40–100 specific test cases, and MCP payload
 > for direct Jira/ADO/Linear import.
 
 ## Reliability & Safety
